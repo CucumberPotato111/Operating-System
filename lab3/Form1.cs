@@ -20,6 +20,7 @@ namespace lab3
         const int yCell = 30;
         const int xMax = 25;
         const int yMax = 20;
+        Mutex[,] mutList;
         //tạo ₫ối tượng sinh số ngẫu nhiên
         public Random rnd = new Random();
         //₫ịnh nghĩa hàm giả lập hành vi của thread
@@ -36,6 +37,8 @@ namespace lab3
             Graphics g = this.CreateGraphics();
             //tạo chổi màu ₫en ₫ể xóa cell cũ
             Brush brush = new SolidBrush(Color.FromArgb(0, 0, 0));
+            //xin khóa truy xuất cell (x1,y1)
+            mutList[p.Pos.Y, p.Pos.X].WaitOne();
             int x1, y1;
             int x2, y2;
             int x, y;
@@ -87,21 +90,28 @@ namespace lab3
                     //xác ₫ịnh vị trí mới của thread
                     p.HieuchinhVitri();
                     x2 = p.Pos.X; y2 = p.Pos.Y;
+                    //xin khóa truy xuất cell (x2,y2)
+                    while (true)
+                    {
+                        kq = mutList[y2, x2].WaitOne(new TimeSpan(0, 0, 2));
+                        if (kq == true || p.start == false) break;
+                    }
                     // Xóa vị trí cũ
                     g.FillRectangle(brush, xCell * x1, yCell * y1, xCell, yCell);
-                    if (kq == false && p.start == false)
-                    { //xoa thread
-                      // dừng Thread
-                        p.t.Abort();
-                        p.stop = true;
-                        return;
-                    }
+                    //trả cell (x1,y1) cho các thread khác truy xuất
+                    mutList[y1, x1].ReleaseMutex();
                 }
             }
             catch (Exception e) { p.t.Abort(); }
             //dọn dẹp thread trước khi ngừng
             x1 = p.Pos.X; y1 = p.Pos.Y;
-            g.FillRectangle(brush, xCell * x1, yCell * y1, xCell, yCell);
+            
+            //g.FillRectangle(brush, xCell * x1, yCell * y1, xCell, yCell);
+            //trả cell (x1,y1) cho các thread khác truy xuất
+            if (kq == true && p.start == false) {
+                mutList[y1, x1].ReleaseMutex();
+            }
+            
             // dừng Thread
             p.stop = true;
             p.t.Abort();
@@ -115,6 +125,12 @@ namespace lab3
         {
             System.Reflection.Assembly myAssembly = System.Reflection.Assembly.GetExecutingAssembly();
             //Lặp thiết lập trạng thái ban ₫ầu cho 26 thread từ A-Z
+            //tạo ma trận semaphore Mutex ₫ể bảo vệ các cell nàm hình
+            mutList = new Mutex[yMax, xMax];
+            int h, cot;
+            for (h = 0; h < yMax; h++)
+                for (cot = 0; cot < xMax; cot++)
+                    mutList[h, cot] = new Mutex();
             for (int i = 0; i < 26; i++)
             {
                 threadLst[i] = new MyThread(rnd, xMax, yMax);

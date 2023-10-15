@@ -9,3 +9,14 @@ B:\Codes\C#\Lab\Os\lab3\obj\Debug\lab3.csproj.GenerateResource.cache
 B:\Codes\C#\Lab\Os\lab3\obj\Debug\lab3.csproj.CoreCompileInputs.cache
 B:\Codes\C#\Lab\Os\lab3\obj\Debug\lab3.exe
 B:\Codes\C#\Lab\Os\lab3\obj\Debug\lab3.pdb
+D:\lab3\bin\Debug\lab3.exe.config
+D:\lab3\bin\Debug\lab3.exe
+D:\lab3\bin\Debug\lab3.pdb
+D:\lab3\obj\Debug\lab3.csproj.AssemblyReference.cache
+D:\lab3\obj\Debug\lab3.csproj.SuggestedBindingRedirects.cache
+D:\lab3\obj\Debug\lab3.Form1.resources
+D:\lab3\obj\Debug\lab3.Properties.Resources.resources
+D:\lab3\obj\Debug\lab3.csproj.GenerateResource.cache
+D:\lab3\obj\Debug\lab3.csproj.CoreCompileInputs.cache
+D:\lab3\obj\Debug\lab3.exe
+D:\lab3\obj\Debug\lab3.pdb
